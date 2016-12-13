@@ -4,7 +4,8 @@
   "description": "AWS Lambda function retrieving analytics from Mailchimp and Google Analytics and sent to employees",
   "main": "index.js",
   "scripts": {
-    "build": "babel src --out-dir lib --ignore spec.js,test.js"
+    "build": "babel src --out-dir lib --ignore spec.js,test.js",
+    "test": "tape 'src/**/*.spec.js' -r ./test | tap-spec"
   },
   "repository": "git@github.com:adambrgmn/sst-analytics.git",
   "author": "Adam Bergman <adam@fransvilhelm.com>",
@@ -18,9 +19,13 @@
     "babel-plugin-transform-flow-strip-types": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-latest": "^6.16.0",
+    "babel-register": "^6.18.0",
+    "blue-tape": "^1.0.0",
     "eslint": "^3.12.0",
     "eslint-config-airbnb-base": "latest",
     "eslint-plugin-flowtype": "^2.29.1",
-    "eslint-plugin-import": "^2.2.0"
+    "eslint-plugin-import": "^2.2.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3"
   }
 }

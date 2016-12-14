@@ -18,7 +18,7 @@ const {
 } = process.env;
 
 if (!GA_ACCOUNT_ID || !GA_WEB_PROPERTY || !GA_PROFILE || !CLIENT_EMAIL || !PRIVATE_KEY) {
-  throw new Error('Neccessary environment variables is not set');
+  throw new Error('Necessary environment variables is not set');
 }
 
 const accountId = Number(GA_ACCOUNT_ID);

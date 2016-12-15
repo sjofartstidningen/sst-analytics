@@ -15,3 +15,11 @@ declare type GApayload = {
   'start-date': string,
   'end-date': string,
 };
+
+declare type GAdata = {
+  start: Date,
+  end: Date,
+  metrics: string,
+  dimensions?: string,
+  sort?: string,
+};

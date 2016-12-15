@@ -27,4 +27,4 @@ declare type GAdata = {
   maxResults?: number,
 };
 
-declare type GAmetrics = 'sessions' | 'pageviews' | 'users' | 'pagePath' | 'pageTitle';
+declare type GAmetrics = 'sessions' | 'pageviews' | 'users' | 'pagePath' | 'pageTitle' | 'source';

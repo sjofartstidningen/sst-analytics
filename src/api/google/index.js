@@ -41,25 +41,31 @@ export const coreApi = async (
   }
 };
 
-// buildMetricsString :: <String> => String
-const buildMetricsString = R.compose(R.join(','), R.map(R.concat('ga:')));
+// buildGaString :: [String] => String
+const buildGaString = (metricsArr: Array<GAmetrics>) => (
+  R.compose(R.join(','), R.map(R.concat('ga:')))(metricsArr)
+);
 
 // redefineKeys :: { k: v } => { k: v }
 const redefineKeys = R.compose(R.fromPairs, R.map(R.adjust(R.replace('ga:', ''), 0)), R.toPairs);
 
-// extractData :: <{a: b}> => <{c: d}>;
+// extractData :: [{a: b}] => [{c: d}];
 const extractData = R.map(R.compose(redefineKeys, R.prop('totalsForAllResults')));
 
-type GAmetrics = 'sessions' | 'pageviews' | 'users';
-export const getViewMetrics = async (...metricsArr: Array<GAmetrics>): Promise<any> => {
-  try {
-    const metrics = buildMetricsString(metricsArr);
-    const dateRanges = getDateRanges(new Date());
+// all :: [a] => Promise [b]
+const all = R.bind(Promise.all, Promise);
 
-    const promises = dateRanges.map(({ end, start }) => coreApi({ end, start, metrics }));
-    const result = await Promise.all(promises);
-    const data = extractData(result);
-    return data;
+// identityP :: a => Promise a
+const identityP = R.bind(Promise.resolve, Promise);
+
+// getViewMetrics :: (Date, [String]) => [{k: v}]
+export const getViewMetrics = (today: Date, metricsArr: Array<GAmetrics>): Promise<any> => {
+  const metrics = buildGaString(metricsArr);
+  const mergeAndApiCall = R.compose(coreApi, R.assoc('metrics', metrics));
+
+  return R.composeP(extractData, all, R.map(mergeAndApiCall), getDateRanges, identityP)(today);
+};
+
   } catch (err) {
     throw err;
   }

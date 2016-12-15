@@ -66,6 +66,7 @@ export const getViewMetrics = (today: Date, metricsArr: Array<GAmetrics>): Promi
   return R.composeP(extractData, all, R.map(mergeAndApiCall), getDateRanges, identityP)(today);
 };
 
+
 // generalPattern :: String => Boolean
 const generalPattern = R.complement(R.anyPass([
   R.test(/^\/$/),
@@ -86,8 +87,8 @@ const spec = {
   jobs: R.compose(R.map(renamer), R.take(5), R.filter(R.compose(jobPattern, R.head))),
 };
 
-// callAndExtractData :: Payload => Promise {k: v}
-const callAndExtractData = R.composeP(R.applySpec(spec), R.prop('rows'), coreApi);
+// callAndExtractMostViews :: Payload => Promise {k: v}
+const callAndExtractMostViews = R.composeP(R.applySpec(spec), R.prop('rows'), coreApi);
 
 // getMostViews :: Date => Promise {k: v}
 export const getMostViews = async (today: Date): Promise<any> => {
@@ -95,11 +96,12 @@ export const getMostViews = async (today: Date): Promise<any> => {
     R.assoc('sort', '-ga:pageviews'),
     R.assoc('dimensions', buildGaString(['pagePath', 'pageTitle'])),
     R.assoc('metrics', buildGaString(['pageviews'])),
-    R.merge(R.compose(R.head, getDateRanges)(today)),
-  )({});
+    R.head,
+    getDateRanges,
+  )(today);
 
   try {
-    const result = await callAndExtractData(payload);
+    const result = await callAndExtractMostViews(payload);
     return result;
   } catch (err) {
     throw err;

@@ -1,3 +1,5 @@
+// @flow
+
 declare type GAjwt = {
   authorize: () => void,
 };
@@ -22,4 +24,7 @@ declare type GAdata = {
   metrics: string,
   dimensions?: string,
   sort?: string,
+  maxResults?: number,
 };
+
+declare type GAmetrics = 'sessions' | 'pageviews' | 'users' | 'pagePath' | 'pageTitle';

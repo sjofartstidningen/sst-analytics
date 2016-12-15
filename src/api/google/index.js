@@ -6,21 +6,28 @@ import R from 'ramda';
 import auth from './auth';
 import getDateRanges from './getDateRanges';
 import { formatDate } from '../../utils';
-import { GA_ACCOUNT_ID, GA_WEB_PROPERTY, GA_PROFILE_ID, CLIENT_EMAIL, PRIVATE_KEY } from '../../env';
+import env from '../../env';
 
 const analytics = promisify(google.analytics('v3').data.ga.get);
 
-export const coreApi = async ({ start, end, metrics, dimensions, sort }: GAdata): Promise<any> => {
+const CLIENT_EMAIL = env('CLIENT_EMAIL');
+const PRIVATE_KEY = env('PRIVATE_KEY');
+const GA_ACCOUNT_ID = env('GA_ACCOUNT_ID');
+const GA_PROFILE_ID = env('GA_PROFILE_ID');
+const GA_WEB_PROPERTY = env('GA_WEB_PROPERTY');
+
+export const coreApi = async (
+  { start, end, metrics, dimensions, sort }: GAdata,
+): Promise<any> => {
   try {
     const payload: GApayload = {
       auth: await auth(CLIENT_EMAIL, PRIVATE_KEY),
-      accountId: GA_ACCOUNT_ID,
-      profileId: GA_PROFILE_ID,
+      accountId: Number(GA_ACCOUNT_ID),
+      profileId: Number(GA_PROFILE_ID),
       webPropertyId: GA_WEB_PROPERTY,
       ids: `ga:${GA_PROFILE_ID}`,
       'start-date': formatDate(start),
       'end-date': formatDate(end),
-      'max-results': 50,
       metrics,
     };
 

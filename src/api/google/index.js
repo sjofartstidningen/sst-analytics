@@ -66,19 +66,46 @@ export const getViewMetrics = (today: Date, metricsArr: Array<GAmetrics>): Promi
   return R.composeP(extractData, all, R.map(mergeAndApiCall), getDateRanges, identityP)(today);
 };
 
+// generalPattern :: String => Boolean
+const generalPattern = R.complement(R.anyPass([
+  R.test(/^\/$/),
+  R.test(/^\/nyheter\/$/),
+  R.test(/^\/jobb\//),
+  R.test(/^\/jobb-karriar\/folk-pa-vag\/$/),
+  R.test(/^\/bloggar\/$/),
+]));
+
+// jobPattern :: String => Boolean
+const jobPattern = R.anyPass([R.test(/^\/jobb\//)]);
+
+// renamer :: String => String
+const renamer = R.over(R.lensIndex(1), R.compose(R.trim, R.replace(/\|/g, ''), R.replace(/Sjöfartstidningen/g, '')));
+
+const spec = {
+  top: R.compose(R.map(renamer), R.take(5), R.filter(R.compose(generalPattern, R.head))),
+  jobs: R.compose(R.map(renamer), R.take(5), R.filter(R.compose(jobPattern, R.head))),
+};
+
+// callAndExtractData :: Payload => Promise {k: v}
+const callAndExtractData = R.composeP(R.applySpec(spec), R.prop('rows'), coreApi);
+
+// getMostViews :: Date => Promise {k: v}
+export const getMostViews = async (today: Date): Promise<any> => {
+  const payload = R.compose(
+    R.assoc('sort', '-ga:pageviews'),
+    R.assoc('dimensions', buildGaString(['pagePath', 'pageTitle'])),
+    R.assoc('metrics', buildGaString(['pageviews'])),
+    R.merge(R.compose(R.head, getDateRanges)(today)),
+  )({});
+
+  try {
+    const result = await callAndExtractData(payload);
+    return result;
   } catch (err) {
     throw err;
   }
 };
 
-//   const mostViews = await getMostViews({
-//     start,
-//     end,
-//     metrics: 'ga:pageviews',
-//     dimensions: 'ga:pagePath,ga:pageTitle',
-//     sort: '-ga:pageviews',
-//   });
-//
 //   const referrals = await getReferrals({
 //     start,
 //     end,

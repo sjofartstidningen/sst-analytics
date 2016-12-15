@@ -5,13 +5,19 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir lib --ignore spec.js,test.js",
-    "test": "tape 'src/**/*.spec.js' -r ./test | tap-spec"
+    "test": "env-cmd test tape 'src/**/*.spec.js' -r ./test | tap-spec",
+    "start": "env-cmd development babel-node src/index.js"
   },
   "repository": "git@github.com:adambrgmn/sst-analytics.git",
   "author": "Adam Bergman <adam@fransvilhelm.com>",
   "license": "MIT",
   "dependencies": {
-    "babel-runtime": "^6.20.0"
+    "babel-runtime": "^6.20.0",
+    "bluebird": "^3.4.6",
+    "date-fns": "^1.20.0",
+    "env-cmd": "^4.0.0",
+    "googleapis": "^15.0.0",
+    "ramda": "^0.22.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

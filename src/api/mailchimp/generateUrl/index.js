@@ -18,5 +18,5 @@ export const baseUrl = (): string => R.compose(
   R.assoc('host', R.concat(location, '.api.mailchimp.com')),
 )(urlSpec);
 
-// subReports :: String -> String
-export const subReports = (campaignId: string): string => url.resolve(baseUrl(), `reports/${campaignId}/sub-reports`);
+// reportUrl :: String -> String
+export const reportUrl = (campaignId: string): string => `/reports/${campaignId}`;

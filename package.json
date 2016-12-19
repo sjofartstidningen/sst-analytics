@@ -12,6 +12,7 @@
   "author": "Adam Bergman <adam@fransvilhelm.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.15.3",
     "babel-runtime": "^6.20.0",
     "bluebird": "^3.4.6",
     "date-fns": "^1.20.0",

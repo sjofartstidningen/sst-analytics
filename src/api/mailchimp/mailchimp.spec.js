@@ -12,15 +12,15 @@ test('API: mailchimp.report', async (t) => {
   const singleReport = R.head(result);
 
   {
-    const should = 'Should return an array of reports';
-    const actual = Array.isArray(result);
+    const should = 'Should return an array of two latest reports';
+    const actual = R.length(result) <= 2;
     const expected = true;
 
     t.equal(actual, expected, should);
   }
 
   {
-    const should = 'Should return reports containing containing props campaign_title, emails_sent, opens, clicks';
+    const should = 'Should return reports containing props campaign_title, emails_sent, opens, clicks';
     const actual = [
       propIsString('campaign_title', singleReport),
       propIsNumber('emails_sent', singleReport),
@@ -33,7 +33,7 @@ test('API: mailchimp.report', async (t) => {
 
   {
     const should = 'Should return reports containing list of most clicked links';
-    const actual = R.compose(Array.isArray, R.prop('links'))(singleReport);
+    const actual = R.compose(R.length, R.prop('links'))(singleReport) <= 5;
     const expected = true;
 
     t.equal(actual, expected, should);
@@ -45,8 +45,8 @@ test('API: mailchimp.clickReport', async (t) => {
   const item = R.head(result);
 
   {
-    const should = 'Should return an array of most clicked links';
-    const actual = Array.isArray(result);
+    const should = 'Should return an array of five most clicked links';
+    const actual = R.length(result) <= 5;
     const expected = true;
 
     t.equal(actual, expected, should);

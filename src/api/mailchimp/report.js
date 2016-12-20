@@ -26,13 +26,13 @@ const extractData = R.composeP(
 );
 
 export default async () => {
-  const [{ start, end }] = getDateRanges(new Date());
+  const [{ startDate, endDate }] = getDateRanges(new Date());
   const fields = constructFields(['id', 'campaign_title', 'subject_line', 'emails_sent', 'opens', 'clicks']);
 
   const response = await coreApi.get('/reports', {
     params: {
-      before_send_time: end,
-      since_send_time: start,
+      before_send_time: endDate,
+      since_send_time: startDate,
       fields,
     },
   });

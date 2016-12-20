@@ -1,33 +1,40 @@
 import R from 'ramda';
 import coreApi from '../google';
-import getDateRanges from './getDateRanges';
-import buildGaString from './buildGaString';
+import { constructRequest, constructMetricsArray } from './utils';
 
-// redefineKeys :: { k: v } => { k: v }
-const redefineKeys = R.compose(R.fromPairs, R.map(R.adjust(R.replace('ga:', ''), 0)), R.toPairs);
+const getMetrics = R.compose(R.prop('totals'), R.prop('data'), R.prop(0), R.prop('reports'));
+const getCurrent = R.curry((nth, obj) => R.compose(R.nth(nth), R.prop('values'), R.nth(0))(obj));
+const getPrevious = R.curry((nth, obj) => R.compose(R.nth(nth), R.prop('values'), R.nth(1))(obj));
 
-// extractData :: [{a: b}] => [{c: d}];
-const extractData = R.map(R.compose(redefineKeys, R.prop('totalsForAllResults')));
+const getDiff = R.curry((nth, metrics) => {
+  const curr = getCurrent(nth, metrics);
+  const prev = getPrevious(nth, metrics);
+  return R.subtract(R.divide(curr, prev), 1);
+});
 
-// all :: [a] => Promise [b]
-const all = R.bind(Promise.all, Promise);
+const applyMetrics = R.applySpec({
+  sessions: {
+    total: getCurrent(0),
+    diff: getDiff(0),
+  },
+  users: {
+    total: getCurrent(1),
+    diff: getDiff(1),
+  },
+  pageviews: {
+    total: getCurrent(2),
+    diff: getDiff(2),
+  },
+});
 
-// identityP :: a => Promise a
-const identityP = R.bind(Promise.resolve, Promise);
+export default async (range) => {
+  const result = await coreApi([
+    constructRequest(range, {
+      metrics: constructMetricsArray(['sessions', 'users', 'pageviews']),
+    }),
+  ]);
 
-const statsToNumbers = R.map(R.map(Number));
+  const metrics = getMetrics(result);
 
-// getViewMetrics :: Date => [{k: v}]
-export default (today: Date): Promise<any> => {
-  const metrics = buildGaString(['sessions', 'users', 'pageviews']);
-  const mergeAndApiCall = R.compose(coreApi, R.assoc('metrics', metrics));
-
-  return R.composeP(
-    statsToNumbers,
-    extractData,
-    all,
-    R.map(mergeAndApiCall),
-    getDateRanges,
-    identityP,
-  )(today);
+  return applyMetrics(metrics);
 };

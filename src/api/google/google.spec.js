@@ -1,86 +1,87 @@
 import test from 'blue-tape';
 import R from 'ramda';
-import getMostViews from './getMostViews';
-import getViewMetrics from './getViewMetrics';
-import getReferrals from './getReferrals';
+import auth from './auth';
+import coreApi from '../google';
+import report from './report';
 
-test('API: google.getMostViews', async (t) => {
-  const result = await getMostViews(new Date());
-  const getTypes = R.map(R.type);
+const propType = R.compose(R.type, R.prop);
+
+test('API: google.auth', async (t) => {
+  const result = await auth();
+
+  const should = 'Should return an object with access token, access type and expiry';
+  const actual = [propType('access_token', result), propType('token_type', result), propType('expires_in', result)];
+  const expected = ['String', 'String', 'Number'];
+
+  t.deepEqual(actual, expected, should);
+});
+
+test('API: google.coreApi', async (t) => {
+  const mockRequestBody = [
+    {
+      viewId: '7009314',
+      dateRanges: [{ startDate: '2016-11-01', endDate: '2016-11-30' }],
+      metrics: [{ expression: 'ga:users' }],
+    },
+  ];
+
+  const result = await coreApi(mockRequestBody);
 
   {
-    const should = 'Should return most viewed articles';
-    const actual = R.compose(Array.isArray, R.prop('top'))(result);
+    const should = 'Should return a response from Google Analytics';
+    const actual = Array.isArray(result.reports);
     const expected = true;
 
     t.equal(actual, expected, should);
   }
-
-  {
-    const should = 'Should return most viewed jobs';
-    const actual = R.compose(Array.isArray, R.prop('jobs'))(result);
-    const expected = true;
-
-    t.equal(actual, expected, should);
-  }
-
-  {
-    const should = 'Every item in response should contain three items (path, title, views)';
-    const actual = getTypes(result.top[0]);
-    const expected = ['String', 'String', 'Number'];
-
-    t.deepEqual(actual, expected, should);
-  }
 });
 
-test('API: google.getViewMetrics', async (t) => {
-  const result = await getViewMetrics(new Date());
+test('API: google.report', async (t) => {
+  const result = await report();
 
   {
-    const should = 'Should return view stats for four periods (current week/year, previous week/year)';
-    const actual = R.length(result);
-    const expected = 4;
-
-    t.equal(actual, expected, should);
-  }
-
-  {
-    const should = 'Should return stats for users, sessions and pageviews in each period';
-    const actual = R.map(R.allPass([R.has('users'), R.has('sessions'), R.has('pageviews')]), result);
-    const expected = [true, true, true, true];
+    const should = 'Should return an object with keys representing data';
+    const actual = [propType('viewMetrics', result), propType('referrals', result), propType('mostViews', result)];
+    const expected = ['Object', 'Array', 'Object'];
 
     t.deepEqual(actual, expected, should);
   }
 
   {
-    const should = 'Should return stats as numbers';
-    const actual = R.map(
-      R.allPass([R.propIs(Number, 'users'), R.propIs(Number, 'sessions'), R.propIs(Number, 'pageviews')]),
-      result,
-    );
-    const expected = [true, true, true, true];
+    const viewMetrics = R.prop('viewMetrics', result);
+    const week = R.prop('week', viewMetrics);
+    const year = R.prop('year', viewMetrics);
 
-    t.deepEqual(actual, expected, should);
-  }
-});
-
-test('API: google.getReferrals', async (t) => {
-  const result = await getReferrals(new Date());
-
-  {
-    const should = 'Should return top five referrals';
-    const actual = R.length(result);
-    const expected = 5;
-
-    t.equal(actual, expected, should);
-  }
-
-  {
-    const should = 'Should return a list of pairs (title, referrals)';
+    const should = 'Should contain viewMetrics about sessions, users and pageviews';
     const actual = [
-      R.is(Number, R.prop(1, R.prop(0, result))),
-      R.is(String, R.prop(0, R.prop(0, result))),
+      propType('sessions', week), propType('users', week), propType('pageviews', week),
+      propType('sessions', year), propType('users', year), propType('pageviews', year),
     ];
+    const expected = [
+      'Object', 'Object', 'Object',
+      'Object', 'Object', 'Object',
+    ];
+
+    t.deepEqual(actual, expected, should);
+  }
+
+  {
+    const referrals = R.prop('referrals', result);
+
+    const should = 'Should return an array of top five referrers';
+    const actual = R.length(referrals) <= 5;
+    const expected = true;
+
+    t.equal(actual, expected, should);
+  }
+
+  {
+    const mostViews = R.prop('mostViews', result);
+    const articles = R.prop('articles', mostViews);
+    const jobs = R.prop('jobs', mostViews);
+
+    const should = 'Should return two arrays of most viewed articles and most viewd jobs';
+    const actual = [R.length(articles) <= 5, R.length(jobs) <= 5];
     const expected = [true, true];
 
     t.deepEqual(actual, expected, should);

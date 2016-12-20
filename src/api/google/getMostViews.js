@@ -1,47 +1,53 @@
 import R from 'ramda';
 import coreApi from '../google';
-import getDateRanges from './getDateRanges';
-import buildGaString from './buildGaString';
+import { constructRequest, constructMetricsArray, constructDimensionsArray } from './utils';
 
-// generalPattern :: String => Boolean
-const generalPattern = R.complement(R.anyPass([
-  R.test(/^\/$/),
-  R.test(/^\/nyheter\/$/),
-  R.test(/^\/jobb\//),
-  R.test(/^\/jobb-karriar\/folk-pa-vag\/$/),
-  R.test(/^\/bloggar\/$/),
-]));
+const getReport = R.compose(R.prop('rows'), R.prop('data'), R.prop(0), R.prop('reports'));
 
-// jobPattern :: String => Boolean
-const jobPattern = R.anyPass([R.test(/^\/jobb\//)]);
+const renameTitle = R.compose(R.trim, R.replace(/\|/g, ''), R.replace(/Sjöfartstidningen/g, ''));
 
-// renamer :: String => String
-const renamer = R.over(R.lensIndex(1), R.compose(R.trim, R.replace(/\|/g, ''), R.replace(/Sjöfartstidningen/g, '')));
-const viewToNumber = R.over(R.lensIndex(2), Number);
-const takeAndTransformItems = R.compose(R.map(R.compose(viewToNumber, renamer)), R.take(5));
+const isJobs = R.compose(R.test(/^\/jobb\//), R.prop('url'));
+const isNotJobs = R.complement(isJobs);
+const isRoot = R.compose(R.test(/^\/$/), R.prop('url'));
+const isNotRoot = R.complement(isRoot);
+const isNews = R.compose(R.test(/^\/nyheter\/$/), R.prop('url'));
+const isNotNews = R.complement(isNews);
 
-const spec = {
-  top: R.compose(takeAndTransformItems, R.filter(R.compose(generalPattern, R.head))),
-  jobs: R.compose(takeAndTransformItems, R.filter(R.compose(jobPattern, R.head))),
-};
+const allPassArticles = R.allPass([isNotJobs, isNotRoot, isNotNews]);
+const allPassJobs = R.allPass([isJobs]);
 
-// callAndExtractMostViews :: Payload => Promise {k: v}
-const callAndExtractMostViews = R.composeP(R.applySpec(spec), R.prop('rows'), coreApi);
+const reorganizeData = R.applySpec({
+  url: R.compose(R.head, R.prop('dimensions')),
+  title: R.compose(renameTitle, R.last, R.prop('dimensions')),
+  views: R.compose(Number, R.head, R.prop('values'), R.head, R.prop('metrics')),
+});
 
-// getMostViews :: Date => Promise {k: v}
-export default async (today: Date): Promise<any> => {
-  const payload = R.compose(
-    R.assoc('sort', '-ga:pageviews'),
-    R.assoc('dimensions', buildGaString(['pagePath', 'pageTitle'])),
-    R.assoc('metrics', buildGaString(['pageviews'])),
-    R.head,
-    getDateRanges,
-  )(today);
+const filterSortAndTake5 = predicateFn => R.compose(R.reverse, R.takeLast(5), R.sortBy(R.prop('views')), R.filter(predicateFn));
 
-  try {
-    const result = await callAndExtractMostViews(payload);
-    return result;
-  } catch (err) {
-    throw err;
-  }
+const splitInCategories = R.applySpec({
+  articles: filterSortAndTake5(allPassArticles),
+  jobs: filterSortAndTake5(allPassJobs),
+});
+
+const extractData = R.compose(
+  splitInCategories,
+  R.map(reorganizeData),
+  getReport,
+);
+
+export default async (range) => {
+  const result = await coreApi([
+    constructRequest(range, {
+      metrics: constructMetricsArray(['pageviews']),
+      dimensions: constructDimensionsArray(['pagePath', 'pageTitle']),
+      orderBys: [
+        {
+          fieldName: 'ga:pageviews',
+          sortOrder: 'DESCENDING',
+        },
+      ],
+    }),
+  ]);
+
+  return extractData(result);
 };

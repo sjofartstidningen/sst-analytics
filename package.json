@@ -18,6 +18,8 @@
     "date-fns": "^1.20.0",
     "env-cmd": "^4.0.0",
     "googleapis": "^15.0.0",
+    "jsonwebtoken": "^7.2.1",
+    "qs": "^6.3.0",
     "ramda": "^0.22.1"
   },
   "devDependencies": {

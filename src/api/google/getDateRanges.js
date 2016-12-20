@@ -2,8 +2,9 @@ import startOfWeek from 'date-fns/start_of_iso_week';
 import endOfWeek from 'date-fns/end_of_iso_week';
 import subWeeks from 'date-fns/sub_weeks';
 import subYears from 'date-fns/sub_years';
+import format from 'date-fns/format';
 
-type Range = { end: Date, start: Date };
+type Range = { endDate: Date, startDate: Date };
 type DateRanges = Array<Range>;
 
 export default (today: Date): DateRanges => {
@@ -17,9 +18,9 @@ export default (today: Date): DateRanges => {
   const previousYearStart = subYears(previousYearEnd, 1);
 
   return [
-    { end: currentWeekEnd, start: currentWeekStart },
-    { end: previousWeekEnd, start: previousWeekStart },
-    { end: currentYearEnd, start: currentYearStart },
-    { end: previousYearEnd, start: previousYearStart },
+    { endDate: format(currentWeekEnd, 'YYYY-MM-DD'), startDate: format(currentWeekStart, 'YYYY-MM-DD') },
+    { endDate: format(previousWeekEnd, 'YYYY-MM-DD'), startDate: format(previousWeekStart, 'YYYY-MM-DD') },
+    { endDate: format(currentYearEnd, 'YYYY-MM-DD'), startDate: format(currentYearStart, 'YYYY-MM-DD') },
+    { endDate: format(previousYearEnd, 'YYYY-MM-DD'), startDate: format(previousYearStart, 'YYYY-MM-DD') },
   ];
 };

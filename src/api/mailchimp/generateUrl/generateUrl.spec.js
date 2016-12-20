@@ -9,12 +9,3 @@ test('API: mailchimp.generateUrl.baseUrl', (t) => {
   t.equal(actual, expected, should);
   t.end();
 });
-
-test('API: mailchimp.generateUrl.reportUrl', (t) => {
-  const should = 'Should generate a url for sub-reports on Mailchimp API';
-  const actual = generateUrl.reportUrl('123123'); // <- Campaign ID
-  const expected = '/reports/123123';
-
-  t.equal(actual, expected, should);
-  t.end();
-});

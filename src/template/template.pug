@@ -1,0 +1,137 @@
+mjml
+  mj-head
+    mj-font(name='Libre Franklin' href='https://fonts.googleapis.com/css?family=Libre+Franklin:300,400,500')
+
+    mj-attributes
+      mj-divider(border-width='1px')
+      mj-text(font-family='Libre Franklin' font-weight='400' padding-top='0' padding-bottom='0')
+
+      mj-class(name='header' font-size='20px' padding-top='10px' color='grey')
+      mj-class(name='subheader' font-size='16px' font-weight='300' padding-top='0')
+      mj-class(name='title' font-size='24px' font-weight='300')
+      mj-class(name='subtitle' font-size='16px' font-weight='300' padding-top='8px' padding-bottom='8px')
+      mj-class(name='list-title' font-weight='500')
+      mj-class(name='list-text' padding-bottom='13px')
+      mj-class(name='table' padding-top='0' padding-bottom='0')
+
+    mj-style.
+      .label {
+        margin-left: 4px;
+        opacity: 0.5;
+      }
+
+      .red { color: red; }
+      .green { color: green; }
+
+      .link {
+        color: blue;
+        text-decoration: none;
+      }
+
+      .table-cell-number {
+        text-align: right;
+      }
+
+  mj-body
+    mj-container
+
+      mj-section
+        mj-column
+          mj-image(src=meta.logotype_url)
+
+        mj-column
+          mj-text(mj-class='header') #{meta.title}
+          mj-text(mj-class='header subheader') vecka #{meta.week} – #{meta.year}
+
+      mj-section
+        mj-column
+          mj-divider
+
+      mj-section
+        mj-column
+          mj-text(mj-class='title') Räckvidd webb
+
+      mj-section
+        each period, periodKey in google.viewMetrics
+          mj-column
+            mj-text(mj-class='subtitle')
+              if periodKey === 'week'
+                | Senaste veckan:
+              if (periodKey === 'year')
+                | Senaste året:
+
+            each val, key in period
+              - var total = formatNum(val.total)
+              - var diff = formatPerc(val.diff)
+              mj-text(mj-class='list-title')
+                if key === 'sessions'
+                  | Besökare:
+                if key === 'users'
+                  | Unika besökare:
+                if key === 'pageviews'
+                  | Sidvisningar:
+              mj-text(mj-class='list-text') #{total}
+                span.label(class=val.diff >= 0 ? 'green' : 'red') #{diff}
+
+      mj-section
+        each val, key in google.mostViews
+          mj-column
+            mj-text(mj-class='subtitle')
+              if key === 'articles'
+                | Mest lästa artiklarna:
+              if key === 'jobs'
+                | Mest klickade jobben:
+
+            mj-table(mj-class='table')
+              each link in val
+                - var title = truncateTitle(link.title)
+                - var views = formatNum(link.views)
+                tr
+                  td
+                    a.link(href=`http://www.sjofartstidningen.se${link.url}`) #{title}
+                  td.table-cell-number #{views}
+
+      mj-section
+        mj-column
+          mj-text(mj-class='subtitle') Så hittar besökarna till Sjöfartstidningen.se:
+
+          mj-table(mj-class='table')
+            each val in google.referrals
+              - var referrer = capitalize(val.referrer)
+              - var views = formatNum(val.value)
+              - var diff = formatPerc(val.diff)
+              tr
+                td #{referrer}
+                td.table-cell-number #{views}
+                  span.label(class=val.diff >= 0 ? 'green' : 'red') #{diff}
+
+      mj-section
+        mj-column
+          mj-divider
+
+      mj-section
+        mj-column
+          mj-text(mj-class='title') Räckvidd nyhetsbrev
+
+      mj-section
+        each val in mailchimp
+          mj-column
+            mj-text(mj-class='subtitle')
+              | #{val.campaign_title} – #{val.subject_line}
+
+            mj-text(mj-class='list-title') Mottagare:
+            mj-text(mj-class='list-text') #{formatNum(val.emails_sent)}
+
+            mj-text(mj-class='list-title') Andel som öppnat:
+            mj-text(mj-class='list-text') #{formatPercNoSign(val.opens.open_rate)}
+
+            mj-text(mj-class='list-title') Andel som klickat:
+            mj-text(mj-class='list-text') #{formatPercNoSign(val.clicks.click_rate)}
+
+            mj-text(mj-class='subtitle') Mest klickade artiklarna:
+            mj-table(mj-class='table')
+              each link in val.links
+                tr
+                  td
+                    a.link(href=`http://${link.url}`) #{getRelativeUrl(link.url)}
+                  td.table-cell-number #{formatNum(link.total_clicks)}

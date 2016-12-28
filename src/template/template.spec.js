@@ -2,6 +2,7 @@ import test from 'blue-tape';
 import cheerio from 'cheerio';
 import generateEmail from '../template';
 import transformPug from './transformPug';
+import transformMjml from './transformMjml';
 import report from '../../test/report-example.json';
 
 test.skip('Template: generateEmail()', (t) => {
@@ -35,5 +36,23 @@ test('Template: transformPug()', async (t) => {
     ];
 
     t.deepEqual(actual, expected, should);
+  }
+});
+
+test('Template: transformMjml()', async (t) => {
+  const templateString = await transformPug(report);
+  const result = transformMjml(templateString);
+
+  {
+    const should = 'Should not throw an error';
+    t.doesNotThrow(() => transformMjml(templateString), should);
+  }
+
+  {
+    const should = 'Should return a string of html';
+    const actual = typeof result;
+    const expected = 'string';
+
+    t.equal(actual, expected, should);
   }
 });

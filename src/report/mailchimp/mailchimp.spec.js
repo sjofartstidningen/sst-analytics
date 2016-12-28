@@ -41,7 +41,7 @@ test('API: mailchimp.report', async (t) => {
 });
 
 test('API: mailchimp.clickReport', async (t) => {
-  const result = await clickReport('00b7ec190a');
+  const result = await clickReport('bddd6b0f84');
   const item = R.head(result);
 
   {

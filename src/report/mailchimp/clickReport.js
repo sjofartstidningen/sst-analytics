@@ -6,7 +6,7 @@ const constructFields = R.compose(R.join(','), R.map(R.concat('urls_clicked.')))
 const urlLens = R.lensProp('url');
 const prettyUrl = R.over(
   urlLens,
-  R.compose(R.nth(1), R.match(/^http:\/\/(\S+\/(?:\?p=\d+)*)(?:\?|&)utm_source\S+$/)),
+  R.compose(R.nth(0), R.match(/http:\/\/www.sjofartstidningen.se\/(\S+\/|\?p=\d+)/)),
 );
 
 const combineEqual = R.reduce((acc, obj) => {
@@ -40,6 +40,8 @@ export default async (campaignId: string) => {
       fields: constructFields(['url', 'total_clicks']),
     },
   });
+
+  // console.log(result.data.urls_clicked);
 
   return extractData(result);
 };

@@ -25,7 +25,7 @@ export default async (data) => {
     truncateTitle: str => truncate(str, { length: 33 }),
     capitalize,
     getRelativeUrl: (fullUrl) => {
-      const relativeUrl = fullUrl.replace('www.sjofartstidningen.se', '');
+      const relativeUrl = fullUrl.replace('http://www.sjofartstidningen.se', '');
       return truncate(relativeUrl, { length: 33 });
     },
   }, data);

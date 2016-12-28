@@ -18,7 +18,7 @@ numeral.locale('sv');
 export default async (data) => {
   const templatePath = join(__dirname, 'template.pug');
   const opts = Object.assign({}, {
-    pretty: true,
+    pretty: false,
     formatNum: num => numeral(num).format('0,0'),
     formatPerc: num => numeral(num).format('+0,0.0%'),
     formatPercNoSign: num => numeral(num).format('0,0.0%'),

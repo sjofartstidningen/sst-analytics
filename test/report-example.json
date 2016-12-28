@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "title": "Statistik för webb och nyhetsbrev",
+    "week": 50,
+    "year": 2016,
+    "logotype_url": "https://gallery.mailchimp.com/1369dbd8781eb3a85956a7247/images/1deadd3b-f804-445e-8498-4bdaf24f03d4.png"
+  },
+  "google": {
+    "viewMetrics": {
+      "week": {
+        "sessions": {
+          "total": "18323",
+          "diff": -0.01282258499003286
+        },
+        "users": {
+          "total": "9828",
+          "diff": -0.008874546187979004
+        },
+        "pageviews": {
+          "total": "37890",
+          "diff": 0.020578570274201402
+        }
+      },
+      "year": {
+        "sessions": {
+          "total": "892584",
+          "diff": -0.10372604010712105
+        },
+        "users": {
+          "total": "257616",
+          "diff": -0.08799779093931104
+        },
+        "pageviews": {
+          "total": "1794086",
+          "diff": -0.1468993608233501
+        }
+      }
+    },
+    "referrals": [
+      {
+        "referrer": "(direct)",
+        "value": 12101,
+        "prev": 11738,
+        "diff": 0.03092520020446421
+      },
+      {
+        "referrer": "google",
+        "value": 10508,
+        "prev": 11228,
+        "diff": -0.06412540078375495
+      },
+      {
+        "referrer": "Sjöfartstidningens nyhetsbrev",
+        "value": 7545,
+        "prev": 6907,
+        "diff": 0.09237005936006959
+      },
+      {
+        "referrer": "facebook",
+        "value": 2157,
+        "prev": 1984,
+        "diff": 0.08719758064516125
+      },
+      {
+        "referrer": "twitter",
+        "value": 1397,
+        "prev": 1,
+        "diff": 1396
+      }
+    ],
+    "mostViews": {
+      "articles": [
+        {
+          "url": "/haveriet-malaren-utreds/",
+          "title": "Haveriet i Mälaren utreds",
+          "views": 1462
+        },
+        {
+          "url": "/meriauras-andra-ecocoaster-levererad/",
+          "title": "Meriauras andra EcoCoaster levererad",
+          "views": 1130
+        },
+        {
+          "url": "/lat-regelverket-ta-klivet-den-digitala-varlden/",
+          "title": "”Låt regelverket för lotsplikten ta klivet in i den digitala världen”",
+          "views": 1018
+        },
+        {
+          "url": "/finnlines-och-sol-samarbetar-spanientrafik/",
+          "title": "Finnlines och SOL samarbetar i Spanientrafik",
+          "views": 895
+        },
+        {
+          "url": "/sol-lagger-ned-linje/",
+          "title": "SOL lägger ned linje",
+          "views": 865
+        }
+      ],
+      "jobs": [
+        {
+          "url": "/jobb/befarenvaktgaende-maskinpersonal/",
+          "title": "Befaren/Vaktgående maskinpersonal",
+          "views": 570
+        },
+        {
+          "url": "/jobb/1e-fartygsingenjor/",
+          "title": "1:e Fartygsingenjör",
+          "views": 115
+        },
+        {
+          "url": "/jobb/erfaren-serviceingenjor/",
+          "title": "Erfaren serviceingenjör",
+          "views": 92
+        },
+        {
+          "url": "/jobb/elingenjor-elmaskinist/",
+          "title": "Elingenjör / Elmaskinist",
+          "views": 69
+        },
+        {
+          "url": "/jobb/skeppsmaklare/",
+          "title": "Skeppsmäklare",
+          "views": 9
+        }
+      ]
+    }
+  },
+  "mailchimp": [
+    {
+      "id": "60fb717f3d",
+      "campaign_title": "Sjöfartstidningens nyhetsbrev 161215",
+      "subject_line": "Stena blir delägare i Stampen",
+      "emails_sent": 8397,
+      "opens": {
+        "opens_total": 7956,
+        "unique_opens": 3135,
+        "open_rate": 0.3740157480315,
+        "last_open": "2016-12-21T09:51:31+00:00"
+      },
+      "clicks": {
+        "clicks_total": 2760,
+        "unique_clicks": 2539,
+        "unique_subscriber_clicks": 1253,
+        "click_rate": 0.14948699594369,
+        "last_click": "2016-12-21T08:33:17+00:00"
+      },
+      "links": [
+        {
+          "url": "www.sjofartstidningen.se/stena-blir-delagare-stampen/",
+          "total_clicks": 458
+        },
+        {
+          "url": "www.sjofartstidningen.se/lighthouse-nya-forstudier-presenterades/",
+          "total_clicks": 206
+        },
+        {
+          "url": "www.sjofartstidningen.se/vss-stanger-kontor-ryssland/",
+          "total_clicks": 155
+        },
+        {
+          "url": "www.sjofartstidningen.se/finnlines-och-sol-samarbetar-spanientrafik/",
+          "total_clicks": 47
+        },
+        {
+          "url": "www.sjofartstidningen.se/?p=57356",
+          "total_clicks": 25
+        }
+      ]
+    },
+    {
+      "id": "00b7ec190a",
+      "campaign_title": "Sjöfartstidningens nyhetsbrev 161213",
+      "subject_line": "Meriaruas andra EcoCoaster levererad",
+      "emails_sent": 8404,
+      "opens": {
+        "opens_total": 8145,
+        "unique_opens": 3068,
+        "open_rate": 0.36589147286822,
+        "last_open": "2016-12-21T09:36:57+00:00"
+      },
+      "clicks": {
+        "clicks_total": 2075,
+        "unique_clicks": 1851,
+        "unique_subscriber_clicks": 1072,
+        "click_rate": 0.127847346452,
+        "last_click": "2016-12-21T09:49:37+00:00"
+      },
+      "links": [
+        {
+          "url": "www.sjofartstidningen.se/haveriet-malaren-utreds/",
+          "total_clicks": 445
+        },
+        {
+          "url": "www.sjofartstidningen.se/meriauras-andra-ecocoaster-levererad/",
+          "total_clicks": 426
+        },
+        {
+          "url": "www.sjofartstidningen.se/halla-dar-peter-thomsson/",
+          "total_clicks": 136
+        },
+        {
+          "url": "www.sjofartstidningen.se/?p=57261",
+          "total_clicks": 59
+        },
+        {
+          "url": "www.sjofartstidningen.se/?p=57246",
+          "total_clicks": 51
+        }
+      ]
+    }
+  ]
+}

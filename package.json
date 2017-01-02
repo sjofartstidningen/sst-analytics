@@ -9,7 +9,7 @@
     "start": "NODE_ENV=development babel-node src/index.js",
     "deploy": "npm run build && NODE_ENV=development serverless deploy --verbose",
     "deploy:production": npm run build && NODE_ENV=production serverless deploy --verbose --stage production",
-    "invoke": "npm run build && NODE_ENV=development serverless invoke -f run -l"
+    "invoke": "npm run build && NODE_ENV=development serverless invoke -f send -l"
   },
   "repository": "git@github.com:adambrgmn/sst-analytics.git",
   "author": "Adam Bergman <adam@fransvilhelm.com>",

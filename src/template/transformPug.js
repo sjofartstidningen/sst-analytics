@@ -16,7 +16,7 @@ numeral.register('locale', 'sv', {
 numeral.locale('sv');
 
 export default async (data) => {
-  const templatePath = join(__dirname, 'template.pug');
+  const templatePath = join(__dirname, '../../template', 'template.pug');
   const opts = Object.assign({}, {
     pretty: false,
     formatNum: num => numeral(num).format('0,0'),

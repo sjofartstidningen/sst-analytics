@@ -8,7 +8,7 @@ const propIsString = R.propIs(String);
 const propIsObject = R.propIs(Object);
 
 test('API: mailchimp.report', async (t) => {
-  const result = await report();
+  const result = await report(new Date(2014, 10, 10));
   const singleReport = R.head(result);
 
   {

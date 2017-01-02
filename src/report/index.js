@@ -11,6 +11,6 @@ export default async date => ({
     week: getISOWeek(date),
     year: getYear(date),
   },
-  google: await googleReport(),
-  mailchimp: await mailchimpReport(),
+  google: await googleReport(date),
+  mailchimp: await mailchimpReport(date),
 });

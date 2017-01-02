@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir lib --ignore spec.js,test.js",
-    "test": "env-cmd test tape 'src/**/*.spec.js' -r ./test | tap-spec",
-    "start": "env-cmd development babel-node src/index.js"
+    "test": "NODE_ENV=development tape 'src/**/*.spec.js' -r ./test | tap-spec",
+    "start": "NODE_ENV=development babel-node src/index.js",
+    "deploy": "npm run build && NODE_ENV=development serverless deploy --verbose",
+    "deploy:production": npm run build && NODE_ENV=production serverless deploy --verbose --stage production",
+    "invoke": "npm run build && NODE_ENV=development serverless invoke -f run -l"
   },
   "repository": "git@github.com:adambrgmn/sst-analytics.git",
   "author": "Adam Bergman <adam@fransvilhelm.com>",
@@ -16,7 +19,7 @@
     "babel-runtime": "^6.20.0",
     "bluebird": "^3.4.6",
     "date-fns": "^1.20.0",
-    "env-cmd": "^4.0.0",
+    "dotenv": "^2.0.0",
     "googleapis": "^15.0.0",
     "jsonwebtoken": "^7.2.1",
     "lodash": "^4.17.3",

@@ -1,4 +1,6 @@
 // @flow
+require('dotenv')
+  .config({ path: process.env.NODE_ENV !== 'development' ? '.env' : '.env-development' });
 
 export default (variable: string, defaultValue?: string): string => {
   const envVariable = process.env[variable];

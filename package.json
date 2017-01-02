@@ -7,7 +7,6 @@
     "build": "babel src --out-dir lib --ignore spec.js,test.js",
     "test": "NODE_ENV=development tape 'src/**/*.spec.js' -r ./test | tap-spec",
     "start": "NODE_ENV=development babel-node src/index.js",
-    "deploy": "npm run build && NODE_ENV=development serverless deploy --verbose",
     "invoke": "npm run build && NODE_ENV=development serverless invoke -f send -l"
   },
   "repository": "git@github.com:adambrgmn/sst-analytics.git",

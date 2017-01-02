@@ -1,3 +1,11 @@
+# Compiled code
+lib
+
+# Sensitive data
+secure
+.env*
+!.env-cmdrc-example
+
 # Logs
 logs
 *.log

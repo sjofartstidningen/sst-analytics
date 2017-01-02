@@ -1,0 +1,17 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb-base", "plugin:flowtype/recommended"],
+  "plugins": ["flowtype"],
+  "env": {
+    "node": true,
+    "es6": true,
+    "commonjs": true,
+  },
+  "rules": {
+    "no-console": 0,
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": ["**/test/**/*.js", "**/*.test.js", "**/*.spec.js"] }
+    ]
+  }
+}

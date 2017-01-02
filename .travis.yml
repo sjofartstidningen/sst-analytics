@@ -3,7 +3,7 @@ node_js:
   - '4'
 before_script: npm install -g serverless
 script:
-  - yarn test
+  - npm test
   - ./scripts/deploy.sh
 branches:
   only:

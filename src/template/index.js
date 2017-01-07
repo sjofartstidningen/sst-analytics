@@ -1,7 +1,7 @@
-import transformPug from './transformPug';
-import transformMjml from './transformMjml';
+const transformPug = require('./transformPug');
+const transformMjml = require('./transformMjml');
 
-export default async (report) => {
+module.exports = async (report) => {
   const mjmlTemplate = await transformPug(report);
   const html = transformMjml(mjmlTemplate);
 

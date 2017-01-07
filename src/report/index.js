@@ -1,13 +1,10 @@
-import getISOWeek from 'date-fns/get_iso_week';
-import getYear from 'date-fns/get_year';
-import googleReport from './google/report';
-import mailchimpReport from './mailchimp/report';
-import { log, error } from '../config';
+const getISOWeek = require('date-fns/get_iso_week');
+const getYear = require('date-fns/get_year');
+const googleReport = require('./google/report');
+const mailchimpReport = require('./mailchimp/report');
 
 
-export default async (date) => {
-  log('Building report');
-
+module.exports = async (date) => {
   try {
     const report = {
       meta: {
@@ -20,10 +17,8 @@ export default async (date) => {
       mailchimp: await mailchimpReport(date),
     };
 
-    log('Successfully built report');
     return report;
   } catch (err) {
-    error('Error building report: %O', err);
     throw err;
   }
 };

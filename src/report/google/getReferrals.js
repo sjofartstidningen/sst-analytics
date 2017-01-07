@@ -1,6 +1,6 @@
-import R from 'ramda';
-import coreApi from '../google';
-import { constructRequest, constructMetricsArray, constructDimensionsArray } from './utils';
+const R = require('ramda');
+const coreApi = require('../google');
+const { constructRequest, constructMetricsArray, constructDimensionsArray } = require('./utils');
 
 const getReport = R.compose(R.prop('rows'), R.prop('data'), R.prop(0), R.prop('reports'));
 const reorganizeData = R.applySpec({
@@ -58,7 +58,7 @@ const extractData = R.compose(
   getReport,
 );
 
-export default async (range) => {
+module.exports = async (range) => {
   const result = await coreApi([
     constructRequest(range, {
       metrics: constructMetricsArray(['pageviews']),

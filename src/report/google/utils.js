@@ -1,5 +1,5 @@
-import R from 'ramda';
-import getDateRanges from './getDateRanges';
+const R = require('ramda');
+const getDateRanges = require('./getDateRanges');
 
 const defaultViewId = '7009314';
 
@@ -14,10 +14,10 @@ const constructArrayFactory = field => R.map(R.compose(
   R.concat('ga:'),
 ));
 
-export const constructMetricsArray = constructArrayFactory('expression');
-export const constructDimensionsArray = constructArrayFactory('name');
+exports.constructMetricsArray = constructArrayFactory('expression');
+exports.constructDimensionsArray = constructArrayFactory('name');
 
-export const constructRequest = (dateRange = 'WEEK', opts) => {
+exports.constructRequest = (dateRange = 'WEEK', opts) => {
   const base = {
     viewId: defaultViewId,
     dateRanges: dateRangesObj[dateRange],

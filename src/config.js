@@ -1,5 +1,3 @@
-const debug = require('debug');
-
 // @flow
 const variables = {
   default: {
@@ -16,7 +14,7 @@ const variables = {
   development: { MC_LIST_ID: '15a43ccea6' }, // List of dev only
 };
 
-export default (variable: string, defaultValue?: any): any => {
+module.exports = (variable: string, defaultValue?: any): any => {
   const env = process.env.NODE_ENV || 'development';
 
   try {
@@ -28,6 +26,3 @@ export default (variable: string, defaultValue?: any): any => {
     return defaultValue;
   }
 };
-
-export const log = debug('stt:log');
-export const error = debug('sst:error');

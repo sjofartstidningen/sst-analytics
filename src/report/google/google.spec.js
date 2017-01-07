@@ -1,8 +1,8 @@
-import test from 'blue-tape';
-import R from 'ramda';
-import auth from './auth';
-import coreApi from '../google';
-import report from './report';
+const test = require('blue-tape');
+const R = require('ramda');
+const auth = require('./auth');
+const coreApi = require('../google');
+const report = require('./report');
 
 const propType = R.compose(R.type, R.prop);
 

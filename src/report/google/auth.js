@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
-import axios from 'axios';
-import Qs from 'qs';
-import config from '../../config';
+const jwt = require('jsonwebtoken');
+const axios = require('axios');
+const Qs = require('qs');
+const config = require('../../config');
 
 const GA_PRIVATE_KEY = config('GA_PRIVATE_KEY');
 const GA_CLIENT_EMAIL = config('GA_CLIENT_EMAIL');
@@ -12,7 +12,7 @@ const googleDefaultScope = 'https://www.googleapis.com/auth/analytics.readonly';
 
 let auth = null;
 
-export default async (scope = googleDefaultScope) => {
+module.exports = async (scope = googleDefaultScope) => {
   if (auth != null) return auth;
 
   const assertion = jwt.sign({

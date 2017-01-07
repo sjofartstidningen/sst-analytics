@@ -1,9 +1,8 @@
-import R from 'ramda';
-import Promise from 'bluebird';
-import coreApi from '../mailchimp';
-import clickReport from './clickReport';
-import getDateRanges from '../google/getDateRanges';
-import { log, error } from '../../config';
+const R = require('ramda');
+const Promise = require('bluebird');
+const coreApi = require('../mailchimp');
+const clickReport = require('./clickReport');
+const getDateRanges = require('../google/getDateRanges');
 
 const identityP = R.bind(Promise.resolve, Promise);
 const constructFields = R.compose(R.join(','), R.map(R.concat('reports.')));
@@ -26,9 +25,7 @@ const extractData = R.composeP(
   identityP,
 );
 
-export default async (date) => {
-  log('Building Mailchimp report');
-
+module.exports = async (date) => {
   try {
     const [{ startDate, endDate }] = getDateRanges(date);
     const fields = constructFields(['id', 'campaign_title', 'subject_line', 'emails_sent', 'opens', 'clicks']);
@@ -41,10 +38,8 @@ export default async (date) => {
       },
     });
 
-    log('Successfully build Mailchimp report');
     return extractData(response);
   } catch (err) {
-    error('Error building Mailchimp report: %O', err);
     throw err;
   }
 };

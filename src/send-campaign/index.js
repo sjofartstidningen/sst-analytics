@@ -1,7 +1,7 @@
-import axios from 'axios';
-import R from 'ramda';
-import url from 'url';
-import config from '../config';
+const axios = require('axios');
+const R = require('ramda');
+const url = require('url');
+const config = require('../config');
 
 const MC_KEY = config('MC_KEY');
 const MC_USER = config('MC_USER');
@@ -28,7 +28,7 @@ const mailchimp = axios.create({
   },
 });
 
-export default async (report, html) => {
+module.exports = async (report, html) => {
   try {
     const { data: { id } } = await mailchimp.post('/campaigns', {
       recipients: { list_id: MC_LIST_ID },

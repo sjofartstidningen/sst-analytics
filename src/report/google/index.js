@@ -1,9 +1,9 @@
-import axios from 'axios';
-import auth from './auth';
+const axios = require('axios');
+const auth = require('./auth');
 
 const rootUrl = 'https://analyticsreporting.googleapis.com/v4/reports:batchGet';
 
-export default async (reportRequests) => {
+module.exports = async (reportRequests) => {
   const token = await auth();
 
   const { data } = await axios({

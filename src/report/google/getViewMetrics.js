@@ -1,6 +1,6 @@
-import R from 'ramda';
-import coreApi from '../google';
-import { constructRequest, constructMetricsArray } from './utils';
+const R = require('ramda');
+const coreApi = require('../google');
+const { constructRequest, constructMetricsArray } = require('./utils');
 
 const getMetrics = R.compose(R.prop('totals'), R.prop('data'), R.prop(0), R.prop('reports'));
 const getCurrent = R.curry((nth, obj) => R.compose(R.nth(nth), R.prop('values'), R.nth(0))(obj));
@@ -27,7 +27,7 @@ const applyMetrics = R.applySpec({
   },
 });
 
-export default async (range) => {
+module.exports = async (range) => {
   const result = await coreApi([
     constructRequest(range, {
       metrics: constructMetricsArray(['sessions', 'users', 'pageviews']),

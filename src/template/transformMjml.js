@@ -1,6 +1,6 @@
-import { mjml2html } from 'mjml';
+const { mjml2html } = require('mjml');
 
-export default (templateString) => {
+module.exports = (templateString) => {
   const { html, errors } = mjml2html(templateString);
 
   if (errors.length > 0) {

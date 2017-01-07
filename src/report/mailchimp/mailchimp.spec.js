@@ -1,7 +1,7 @@
-import test from 'blue-tape';
-import R from 'ramda';
-import report from './report';
-import clickReport from './clickReport';
+const test = require('blue-tape');
+const R = require('ramda');
+const report = require('./report');
+const clickReport = require('./clickReport');
 
 const propIsNumber = R.propIs(Number);
 const propIsString = R.propIs(String);

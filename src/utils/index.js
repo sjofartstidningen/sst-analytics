@@ -1,8 +1,8 @@
-import format from 'date-fns/format';
-import R from 'ramda';
+const format = require('date-fns/format');
+const R = require('ramda');
 
-export const formatDate = (date: Date): string => format(date, 'YYYY-MM-DD');
-export const capitalizeFirst = (str: string): string => R.compose(
+exports.formatDate = (date: Date): string => format(date, 'YYYY-MM-DD');
+exports.capitalizeFirst = (str: string): string => R.compose(
   R.join(''),
   R.over(R.lensIndex(0), R.toUpper),
   R.split(''),

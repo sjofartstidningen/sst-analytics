@@ -1,5 +1,5 @@
-import R from 'ramda';
-import coreApi from '../mailchimp';
+const R = require('ramda');
+const coreApi = require('../mailchimp');
 
 const constructFields = R.compose(R.join(','), R.map(R.concat('urls_clicked.')));
 
@@ -34,7 +34,7 @@ const extractData = R.compose(
   R.prop('data'),
 );
 
-export default async (campaignId: string) => {
+module.exports = async (campaignId: string) => {
   const result = await coreApi.get(`/reports/${campaignId}/click-details`, {
     params: {
       fields: constructFields(['url', 'total_clicks']),

@@ -1,8 +1,8 @@
-import { join } from 'path';
-import { renderFile } from 'pug';
-import { promisify } from 'bluebird';
-import numeral from 'numeral';
-import { truncate, capitalize } from 'lodash';
+const { join } = require('path');
+const { renderFile } = require('pug');
+const { promisify } = require('bluebird');
+const numeral = require('numeral');
+const { truncate, capitalize } = require('lodash');
 
 const renderFileAsync = promisify(renderFile);
 
@@ -15,7 +15,7 @@ numeral.register('locale', 'sv', {
 
 numeral.locale('sv');
 
-export default async (data) => {
+module.exports = async (data) => {
   const templatePath = join(__dirname, '../../template', 'template.pug');
   const opts = Object.assign({}, {
     pretty: false,

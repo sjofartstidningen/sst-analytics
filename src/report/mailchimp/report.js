@@ -3,6 +3,7 @@ import Promise from 'bluebird';
 import coreApi from '../mailchimp';
 import clickReport from './clickReport';
 import getDateRanges from '../google/getDateRanges';
+import { log, error } from '../../config';
 
 const identityP = R.bind(Promise.resolve, Promise);
 const constructFields = R.compose(R.join(','), R.map(R.concat('reports.')));
@@ -26,16 +27,24 @@ const extractData = R.composeP(
 );
 
 export default async (date) => {
-  const [{ startDate, endDate }] = getDateRanges(date);
-  const fields = constructFields(['id', 'campaign_title', 'subject_line', 'emails_sent', 'opens', 'clicks']);
+  log('Building Mailchimp report');
 
-  const response = await coreApi.get('/reports', {
-    params: {
-      before_send_time: endDate,
-      since_send_time: startDate,
-      fields,
-    },
-  });
+  try {
+    const [{ startDate, endDate }] = getDateRanges(date);
+    const fields = constructFields(['id', 'campaign_title', 'subject_line', 'emails_sent', 'opens', 'clicks']);
 
-  return extractData(response);
+    const response = await coreApi.get('/reports', {
+      params: {
+        before_send_time: endDate,
+        since_send_time: startDate,
+        fields,
+      },
+    });
+
+    log('Successfully build Mailchimp report');
+    return extractData(response);
+  } catch (err) {
+    error('Error building Mailchimp report: %O', err);
+    throw err;
+  }
 };

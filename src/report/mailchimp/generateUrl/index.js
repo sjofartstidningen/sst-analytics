@@ -2,9 +2,9 @@
 
 import url from 'url';
 import R from 'ramda';
-import env from '../../../env';
+import config from '../../../config';
 
-const MC_KEY = env('MC_KEY');
+const MC_KEY = config('MC_KEY');
 
 const urlSpec = {
   protocol: 'https:',

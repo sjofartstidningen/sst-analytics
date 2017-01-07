@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir lib --ignore spec.js,test.js",
-    "test": "NODE_ENV=development tape 'src/**/*.spec.js' -r ./test | tap-spec",
-    "start": "NODE_ENV=development babel-node src/index.js",
-    "invoke": "npm run build && NODE_ENV=development serverless invoke -f send -l"
+    "test": "tape 'src/**/*.spec.js' -r ./test | tap-spec",
+    "invoke": "npm run build && serverless invoke -f send -l",
+    "invoke:local": "npm run build && serverless invoke local -f send -l"
   },
   "repository": "git@github.com:adambrgmn/sst-analytics.git",
   "author": "Adam Bergman <adam@fransvilhelm.com>",
@@ -17,6 +17,7 @@
     "babel-runtime": "^6.20.0",
     "bluebird": "^3.4.6",
     "date-fns": "^1.20.0",
+    "debug": "^2.6.0",
     "dotenv": "^2.0.0",
     "googleapis": "^15.0.0",
     "jsonwebtoken": "^7.2.1",

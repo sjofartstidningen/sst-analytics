@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import Qs from 'qs';
-import env from '../../env';
+import config from '../../config';
 
-const GA_PRIVATE_KEY = env('GA_PRIVATE_KEY');
-const GA_CLIENT_EMAIL = env('GA_CLIENT_EMAIL');
+const GA_PRIVATE_KEY = config('GA_PRIVATE_KEY');
+const GA_CLIENT_EMAIL = config('GA_CLIENT_EMAIL');
 
 const googleTokenUri = 'https://www.googleapis.com/oauth2/v4/token';
 const googleGrantType = 'urn:ietf:params:oauth:grant-type:jwt-bearer';

@@ -1,37 +1,12 @@
-// POST /campaigns {
-//   recipients: { list_id: process.env.MC_LIST_ID },
-//   settings: {
-//     subject_line: `${report.meta.title} – vecka ${report.meta.week}/${report.meta.year}`,
-//     title: `Statistik vecka ${report.meta.week}/${report.meta.year}`,
-//     from_name: 'Sjöfartstidningen',
-//     reply_to: info@sjofartstidningen.se,
-//     to_name: '*|FNAME|*',
-//     folder_id: process.env.MC_FOLDER_ID,
-//     type: 'regular',
-//   },
-// }
-//
-// PUT /campaigns/{campaign_id}/content {
-//   html: html
-// }
-//
-// GET /campaigns/{campaign_id}/send-checklist
-// RETURNS { is_ready: boolean }
-//
-// POST /campaigns/{campaign_id}/actions/send
-//
-// GET /campaigns/{campaign_id}
-// RETURN { status: save | paused | schedule | sending | sent }
-
 import axios from 'axios';
 import R from 'ramda';
 import url from 'url';
-import env from '../env';
+import config from '../config';
 
-const MC_KEY = env('MC_KEY');
-const MC_USER = env('MC_USER');
-const MC_LIST_ID = env('MC_LIST_ID');
-const MC_FOLDER_ID = env('MC_FOLDER_ID');
+const MC_KEY = config('MC_KEY');
+const MC_USER = config('MC_USER');
+const MC_LIST_ID = config('MC_LIST_ID');
+const MC_FOLDER_ID = config('MC_FOLDER_ID');
 
 const urlSpec = {
   protocol: 'https:',

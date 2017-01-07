@@ -8,7 +8,6 @@ script:
 branches:
   only:
   - master
-  - develop
 notifications:
   email: false
   slack:

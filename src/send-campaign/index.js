@@ -28,31 +28,27 @@ const mailchimp = axios.create({
   },
 });
 
-module.exports = async (report, html) => {
-  try {
-    const { data: { id } } = await mailchimp.post('/campaigns', {
-      recipients: { list_id: MC_LIST_ID },
-      settings: {
-        subject_line: `${report.meta.title} – vecka ${report.meta.week}/${report.meta.year}`,
-        title: `Statistik vecka ${report.meta.week}/${report.meta.year}`,
-        from_name: 'Sjöfartstidningen',
-        reply_to: 'info@sjofartstidningen.se',
-        to_name: '*|FNAME|*',
-        folder_id: MC_FOLDER_ID,
-        auto_footer: true,
-      },
-      type: 'regular',
-    });
+module.exports = (report, html) => mailchimp.post('/campaign', {
+  recipients: { list_id: MC_LIST_ID },
+  settings: {
+    subject_line: `${report.meta.title} – vecka ${report.meta.week}/${report.meta.year}`,
+    title: `Statistik vecka ${report.meta.week}/${report.meta.year}`,
+    from_name: 'Sjöfartstidningen',
+    reply_to: 'info@sjofartstidningen.se',
+    to_name: '*|FNAME|*',
+    folder_id: MC_FOLDER_ID,
+    auto_footer: true,
+  },
+  type: 'regular',
+})
+  .then((res) => {
+    const id = res.data.id;
+    return mailchimp.put(`/campaigns/${id}/content`, { html })
+      .then(() => mailchimp.get(`/campaigns/${id}/send-checklist`))
+      .then((checklist) => {
+        const isNotReady = !checklist.data.is_ready;
+        if (isNotReady) throw new Error('Send checklist did not pass', res.data);
 
-    await mailchimp.put(`/campaigns/${id}/content`, { html });
-
-    const res = await mailchimp.get(`/campaigns/${id}/send-checklist`);
-    if (!res.data.is_ready) throw new Error('An error occured', res.data);
-
-    await mailchimp.post(`/campaigns/${id}/actions/send`);
-
-    return 'MESSAGE SENT SUCCESSFULLY';
-  } catch (err) {
-    throw err;
-  }
-};
+        return mailchimp.post(`/campaigns/${id}/actions/send`);
+      });
+  });

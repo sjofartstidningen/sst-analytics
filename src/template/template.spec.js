@@ -41,7 +41,7 @@ test('Template: transformPug()', async (t) => {
 
 test('Template: transformMjml()', async (t) => {
   const templateString = await transformPug(report);
-  const result = transformMjml(templateString);
+  const result = await transformMjml(templateString);
 
   {
     const should = 'Should not throw an error';

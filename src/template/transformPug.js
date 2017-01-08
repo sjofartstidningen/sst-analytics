@@ -15,7 +15,7 @@ numeral.register('locale', 'sv', {
 
 numeral.locale('sv');
 
-module.exports = async (data) => {
+module.exports = (data) => {
   const templatePath = join(__dirname, '../../template', 'template.pug');
   const opts = Object.assign({}, {
     pretty: false,
@@ -30,10 +30,5 @@ module.exports = async (data) => {
     },
   }, data);
 
-  try {
-    const rendered = await renderFileAsync(templatePath, opts);
-    return rendered;
-  } catch (err) {
-    throw err;
-  }
+  return renderFileAsync(templatePath, opts);
 };

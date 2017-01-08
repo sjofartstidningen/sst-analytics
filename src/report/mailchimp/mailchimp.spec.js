@@ -1,62 +1,67 @@
 const test = require('blue-tape');
 const R = require('ramda');
-const report = require('./report');
+const getMailchimpReport = require('../mailchimp');
 const clickReport = require('./clickReport');
 
-const propIsNumber = R.propIs(Number);
-const propIsString = R.propIs(String);
-const propIsObject = R.propIs(Object);
+const propType = R.compose(R.type, R.prop);
 
-test('API: mailchimp.report', async (t) => {
-  const result = await report(new Date(2014, 10, 10));
-  const singleReport = R.head(result);
+test('REPORT: getMailchimpReport()', (t) => {
+  const date = new Date(2016, 11, 1);
+  return getMailchimpReport(date)
+    .then((report) => {
+      const singleReport = R.head(report);
 
-  {
-    const should = 'Should return an array of two latest reports';
-    const actual = R.length(result) <= 2;
-    const expected = true;
+      {
+        const should = 'Should return an array of two latest reports';
+        const actual = R.length(report) <= 2;
+        const expected = true;
 
-    t.equal(actual, expected, should);
-  }
+        t.equal(actual, expected, should);
+      }
 
-  {
-    const should = 'Should return reports containing props campaign_title, emails_sent, opens, clicks';
-    const actual = [
-      propIsString('campaign_title', singleReport),
-      propIsNumber('emails_sent', singleReport),
-      propIsObject('opens', singleReport),
-      propIsObject('clicks', singleReport)];
-    const expected = [true, true, true, true];
+      {
+        const should = 'Should return reports containing props campaign_title, emails_sent, opens, clicks';
+        const actual = [
+          propType('campaign_title', singleReport),
+          propType('emails_sent', singleReport),
+          propType('opens', singleReport),
+          propType('clicks', singleReport),
+        ];
+        const expected = ['String', 'Number', 'Object', 'Object'];
 
-    t.deepEqual(actual, expected, should);
-  }
+        t.deepEqual(actual, expected, should);
+      }
 
-  {
-    const should = 'Should return reports containing list of most clicked links';
-    const actual = R.compose(R.length, R.prop('links'))(singleReport) <= 5;
-    const expected = true;
+      {
+        const should = 'Should return reports containing list of most clicked links';
+        const actual = R.length(R.prop('links', singleReport)) <= 5;
+        const expected = true;
 
-    t.equal(actual, expected, should);
-  }
+        t.equal(actual, expected, should);
+      }
+    });
 });
 
-test('API: mailchimp.clickReport', async (t) => {
-  const result = await clickReport('bddd6b0f84');
-  const item = R.head(result);
+test('REPORT: mailchimp.clickReport()', (t) => {
+  const id = 'bddd6b0f84';
+  return clickReport(id)
+    .then((res) => {
+      const item = R.head(res);
 
-  {
-    const should = 'Should return an array of five most clicked links';
-    const actual = R.length(result) <= 5;
-    const expected = true;
+      {
+        const should = 'Should return an array of five most clicked links';
+        const actual = R.length(res) <= 5;
+        const expected = true;
 
-    t.equal(actual, expected, should);
-  }
+        t.equal(actual, expected, should);
+      }
 
-  {
-    const should = 'Should return items containing url and total_clicks';
-    const actual = [propIsString('url', item), propIsNumber('total_clicks', item)];
-    const expected = [true, true];
+      {
+        const should = 'Should return items containing url and total_clicks';
+        const actual = [propType('url', item), propType('total_clicks', item)];
+        const expected = ['String', 'Number'];
 
-    t.deepEqual(actual, expected, should);
-  }
+        t.deepEqual(actual, expected, should);
+      }
+    });
 });

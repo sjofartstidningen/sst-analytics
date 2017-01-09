@@ -1,13 +1,13 @@
 language: node_js
 node_js:
-  - '4'
+  - '4.3'
+cache: yarn
 before_script: npm install -g serverless
-script:
-  - npm test
-  - ./scripts/deploy.sh
+script: npm test && ./scripts/deploy.sh
 branches:
   only:
   - master
+  - develop
 notifications:
   email: false
   slack:

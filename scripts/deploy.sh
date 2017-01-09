@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ev
 
 BRANCH=${TRAVIS_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
 STAGE="dev"

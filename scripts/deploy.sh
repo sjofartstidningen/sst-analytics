@@ -10,6 +10,9 @@ if [[ $BRANCH == 'master' ]]; then
   NODE_ENV="production"
 fi
 
+echo "Build .env"
+node scripts/build-dotenv.js
+
 echo "Building source files from src/ to lib/ with Babel"
 npm run build
 

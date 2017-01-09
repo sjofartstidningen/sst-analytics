@@ -29,5 +29,3 @@ functions:
       - schedule: ${self:custom.schedules.${opt:stage, 'dev'}}
     environment:
       NODE_ENV: ${env:NODE_ENV}
-      GA_PRIVATE_KEY: ${env:GA_PRIVATE_KEY}
-      MC_KEY: ${env:MC_KEY}

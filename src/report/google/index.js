@@ -1,17 +1,13 @@
-const axios = require('axios');
-const auth = require('./auth');
+const R = require('ramda');
+const viewMetrics = require('./viewMetrics');
+const referrals = require('./referrals');
+const mostViews = require('./mostViews');
 
-const rootUrl = 'https://analyticsreporting.googleapis.com/v4/reports:batchGet';
+// eslint-disable-next-line
+const applyPromiseRes = R.curry((key, promise, obj) => promise.then(R.assoc(key, R.__, obj)));
 
-module.exports = async (reportRequests) => {
-  const token = await auth();
-
-  const { data } = await axios({
-    method: 'post',
-    url: rootUrl,
-    data: { reportRequests },
-    headers: { Authorization: `${token.token_type} ${token.access_token}` },
-  });
-
-  return data;
-};
+module.exports = date => R.composeP(
+  applyPromiseRes('mostViews', mostViews(date)),
+  applyPromiseRes('referrals', referrals(date)),
+  applyPromiseRes('viewMetrics', viewMetrics(date)),
+)({});

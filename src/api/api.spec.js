@@ -23,7 +23,7 @@ test('API: auth()', t => auth.then((token) => {
 }));
 
 
-test.skip('API: google()', (t) => {
+test('API: google()', (t) => {
   const mockReportRequests = [
     {
       viewId: '7009314',

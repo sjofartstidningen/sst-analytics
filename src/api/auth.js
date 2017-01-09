@@ -11,7 +11,6 @@ const googleGrantType = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
 const googleDefaultScope = 'https://www.googleapis.com/auth/analytics.readonly';
 
 const authenticate = (scope = googleDefaultScope) => {
-  console.log(GA_PRIVATE_KEY);
   const assertion = jwt.sign({
     iss: GA_CLIENT_EMAIL,
     aud: googleTokenUri,

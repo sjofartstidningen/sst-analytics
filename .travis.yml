@@ -3,7 +3,7 @@ node_js:
   - '4.3'
 cache: yarn
 before_script: npm install -g serverless
-script: npm test && ./scripts/deploy.sh
+script: .scripts/before-test && npm test && ./scripts/deploy.sh
 branches:
   only:
   - master

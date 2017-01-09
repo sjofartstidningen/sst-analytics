@@ -1,6 +1,7 @@
 // @flow
 const variables = {
   default: {
+    NODE_ENV: process.env.NODE_ENV,
     GA_ACCOUNT_ID: 3566068,
     GA_WEB_PROPERTY: 'UA-3566068-1',
     GA_PROFILE_ID: 7009314,

@@ -2,7 +2,7 @@ const startOfWeek = require('date-fns/start_of_iso_week');
 const endOfWeek = require('date-fns/end_of_iso_week');
 const subWeeks = require('date-fns/sub_weeks');
 const subYears = require('date-fns/sub_years');
-const format = require('date-fns/format');
+const formatDate = require('../utils').formatDate;
 
 type Range = { endDate: Date, startDate: Date };
 type DateRanges = Array<Range>;
@@ -18,9 +18,9 @@ module.exports = (today: Date = new Date()): DateRanges => {
   const previousYearStart = subYears(previousYearEnd, 1);
 
   return [
-    { endDate: format(currentWeekEnd, 'YYYY-MM-DD'), startDate: format(currentWeekStart, 'YYYY-MM-DD') },
-    { endDate: format(previousWeekEnd, 'YYYY-MM-DD'), startDate: format(previousWeekStart, 'YYYY-MM-DD') },
-    { endDate: format(currentYearEnd, 'YYYY-MM-DD'), startDate: format(currentYearStart, 'YYYY-MM-DD') },
-    { endDate: format(previousYearEnd, 'YYYY-MM-DD'), startDate: format(previousYearStart, 'YYYY-MM-DD') },
+    { endDate: formatDate(currentWeekEnd), startDate: formatDate(currentWeekStart) },
+    { endDate: formatDate(previousWeekEnd), startDate: formatDate(previousWeekStart) },
+    { endDate: formatDate(currentYearEnd), startDate: formatDate(currentYearStart) },
+    { endDate: formatDate(previousYearEnd), startDate: formatDate(previousYearStart) },
   ];
 };

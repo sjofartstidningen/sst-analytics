@@ -1,8 +1,9 @@
 require('dotenv').config({ silent: true });
-const createAndSend = require('./lib');
+const createAndSend = require('./lib/createAndSend');
 
 module.exports.send = (event, context, callback) => {
-  createAndSend()
+  const today = new Date();
+  createAndSend(today)
     .then(res => callback(null, res))
     .catch(err => callback(err));
 };

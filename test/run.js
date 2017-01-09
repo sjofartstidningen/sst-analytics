@@ -1,12 +1,15 @@
-require('dotenv').config();
-const createAndSend = require('../lib/createAndSend');
-
-const today = new Date();
+const send = require('../handler').send;
+const event = require('./custom-event.json');
 
 console.log('\n Running... \n');
-createAndSend(today)
-  .then(res => console.log(res))
-  .catch((err) => {
+
+const callback = (err, res) => {
+  if (err) {
     console.error(err);
     throw err;
-  });
+  }
+
+  return console.log(res);
+};
+
+send(event, null, callback);

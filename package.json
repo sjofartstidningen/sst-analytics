@@ -6,6 +6,7 @@
   "scripts": {
     "build": "babel src --out-dir lib --ignore spec.js,test.js",
     "test": "tape 'src/**/*.spec.js' -r ./test | tap-spec",
+    "start": "npm run build && node test/run.js",
     "invoke": "npm run build && serverless invoke -f send -l",
     "invoke:local": "npm run build && serverless invoke local -f send -l"
   },

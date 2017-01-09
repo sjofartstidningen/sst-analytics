@@ -25,6 +25,8 @@ module.exports = (data) => {
     truncateTitle: str => truncate(str, { length: 33 }),
     capitalize,
     getRelativeUrl: (fullUrl) => {
+      if (!fullUrl) return fullUrl;
+
       const relativeUrl = fullUrl.replace('http://www.sjofartstidningen.se', '');
       return truncate(relativeUrl, { length: 33 });
     },

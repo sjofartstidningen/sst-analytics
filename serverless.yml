@@ -8,9 +8,11 @@ provider:
 
 custom:
   schedule-dev:
-    name: shecdule-dev,
+    name: schedule-dev
     description: 'Triggered every hour'
     rate: rate(60 minutes)
+    enable: false
+
   schedule-production:
     name: schedule-production
     description: 'Triggered mondays 07:00 AM'

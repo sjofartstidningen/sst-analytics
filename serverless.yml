@@ -5,6 +5,8 @@ provider:
   runtime: nodejs4.3
   stage: dev
   region: eu-central-1
+  environment:
+    NODE_ENV: ${env:NODE_ENV}
 
 custom:
   schedule-dev:

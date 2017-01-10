@@ -14,4 +14,4 @@ echo "Building source files from src/ to lib/ with Babel"
 npm run build
 
 echo "Deploying from branch ${BRANCH} to stage ${STAGE} with NODE_ENV=${NODE_ENV}"
-serverless deploy --stage ${STAGE}
+NODE_ENV=${NODE_ENV} serverless deploy --stage ${STAGE}

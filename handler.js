@@ -6,7 +6,7 @@ module.exports.send = (event, context, callback) => {
 
   createAndSend(today)
     .then((res) => {
-      const ret = Object.assign({}, res, { date: today });
+      const ret = Object.assign({}, res, { date: today, env: process.env.NODE_ENV });
       return callback(null, ret);
     })
     .catch(err => callback(err));

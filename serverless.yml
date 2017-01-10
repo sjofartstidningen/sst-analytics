@@ -6,7 +6,7 @@ provider:
   stage: dev
   region: eu-central-1
   environment:
-    NODE_ENV: production
+    NODE_ENV: ${env:NODE_ENV}
 
 custom:
   schedule-dev:

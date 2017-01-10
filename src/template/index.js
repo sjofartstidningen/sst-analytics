@@ -1,9 +1,5 @@
-import transformPug from './transformPug';
-import transformMjml from './transformMjml';
+const R = require('ramda');
+const transformPug = require('./transformPug');
+const transformMjml = require('./transformMjml');
 
-export default async (report) => {
-  const mjmlTemplate = await transformPug(report);
-  const html = transformMjml(mjmlTemplate);
-
-  return html;
-};
+module.exports = R.composeP(transformMjml, transformPug);

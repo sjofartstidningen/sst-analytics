@@ -1,8 +1,8 @@
-import { join } from 'path';
-import { renderFile } from 'pug';
-import { promisify } from 'bluebird';
-import numeral from 'numeral';
-import { truncate, capitalize } from 'lodash';
+const { join } = require('path');
+const { renderFile } = require('pug');
+const { promisify } = require('bluebird');
+const numeral = require('numeral');
+const { truncate, capitalize } = require('lodash');
 
 const renderFileAsync = promisify(renderFile);
 
@@ -15,7 +15,7 @@ numeral.register('locale', 'sv', {
 
 numeral.locale('sv');
 
-export default async (data) => {
+module.exports = (data) => {
   const templatePath = join(__dirname, '../../template', 'template.pug');
   const opts = Object.assign({}, {
     pretty: false,
@@ -25,15 +25,12 @@ export default async (data) => {
     truncateTitle: str => truncate(str, { length: 33 }),
     capitalize,
     getRelativeUrl: (fullUrl) => {
+      if (!fullUrl) return fullUrl;
+
       const relativeUrl = fullUrl.replace('http://www.sjofartstidningen.se', '');
       return truncate(relativeUrl, { length: 33 });
     },
   }, data);
 
-  try {
-    const rendered = await renderFileAsync(templatePath, opts);
-    return rendered;
-  } catch (err) {
-    throw err;
-  }
+  return renderFileAsync(templatePath, opts);
 };

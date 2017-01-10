@@ -1,47 +1,40 @@
-import R from 'ramda';
-import coreApi from '../mailchimp';
+const R = require('ramda');
+const mailchimp = require('../../api/mailchimp');
+const { constructFields, identityP } = require('../../utils');
+const combineEqual = require('../../utils/combineEqual');
 
-const constructFields = R.compose(R.join(','), R.map(R.concat('urls_clicked.')));
+const urlsClickedFields = constructFields('urls_clicked.');
 
 const urlLens = R.lensProp('url');
-const prettyUrl = R.over(
-  urlLens,
-  R.compose(R.nth(0), R.match(/http:\/\/www.sjofartstidningen.se\/(\S+\/|\?p=\d+)/)),
-);
+const prettify = R.compose(R.nth(0), R.match(/http:\/\/www.sjofartstidningen.se\/(\S+\/|\?p=\d+)/));
+const prettyUrl = R.over(urlLens, prettify);
 
-const combineEqual = R.reduce((acc, obj) => {
-  const objUrl = R.prop('url', obj);
-  const index = R.findIndex(R.propEq('url', objUrl), acc);
+const equalityCheck = R.curry((currItem, prevItem) => {
+  const url = R.prop('url');
+  const currUrl = url(currItem);
+  const prevUrl = url(prevItem);
 
-  if (index === -1) return [...acc, obj];
+  return R.equals(currUrl, prevUrl);
+});
 
-  const indexLens = R.lensIndex(index);
-  const totalClicksLens = R.lensProp('total_clicks');
-
-  const objTotalClicks = R.prop('total_clicks', obj);
-
-  const addTotalClicks = R.over(totalClicksLens, R.add(objTotalClicks));
-  return R.over(indexLens, addTotalClicks, acc);
-}, []);
+const combineFn = R.mergeWithKey((k, l, r) => (k === 'total_clicks' ? R.add(l, r) : r));
 
 const extractData = R.compose(
   R.take(5),
   R.reverse,
   R.sortBy(R.prop('total_clicks')),
-  combineEqual,
+  combineEqual(equalityCheck, combineFn),
   R.map(prettyUrl),
   R.prop('urls_clicked'),
   R.prop('data'),
 );
 
-export default async (campaignId: string) => {
-  const result = await coreApi.get(`/reports/${campaignId}/click-details`, {
-    params: {
-      fields: constructFields(['url', 'total_clicks']),
-    },
-  });
+const body = { params: { fields: urlsClickedFields(['url', 'total_clicks']) } };
+const mailchimpGet = R.curry((data, path) => mailchimp.get(path, data));
 
-  // console.log(result.data.urls_clicked);
-
-  return extractData(result);
-};
+module.exports = R.composeP(
+  extractData,
+  mailchimpGet(body),
+  id => `/reports/${id}/click-details`,
+  identityP,
+);

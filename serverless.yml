@@ -5,8 +5,18 @@ provider:
   runtime: nodejs4.3
   stage: dev
   region: eu-central-1
-  environment:
-    NODE_ENV: ${env:NODE_ENV}
+
+custom:
+  schedule-dev:
+    name: schedule-dev
+    description: 'Triggered every hour'
+    rate: rate(60 minutes)
+    enabled: false
+
+  schedule-production:
+    name: schedule-production
+    description: 'Triggered mondays 07:00 AM'
+    rate: cron(0 7 ? * MON *)
 
 package:
   exclude:
@@ -17,4 +27,6 @@ functions:
     handler: handler.send
     description: AWS Lambda function retrieving analytics from Mailchimp and Google Analytics and sent to employees
     events:
-      - schedule: cron(0 7 ? * MON *)
+      - schedule: ${self:custom.schedule-${opt:stage, 'dev'}}
+    environment:
+      NODE_ENV: ${env:NODE_ENV}

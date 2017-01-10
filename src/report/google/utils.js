@@ -1,27 +1,28 @@
-import R from 'ramda';
-import getDateRanges from './getDateRanges';
-
-const defaultViewId = '7009314';
-
-const dateRanges = getDateRanges(new Date());
-const dateRangesObj = {
-  WEEK: [R.nth(0, dateRanges), R.nth(1, dateRanges)],
-  YEAR: [R.nth(2, dateRanges), R.nth(3, dateRanges)],
-};
+const R = require('ramda');
+const Promise = require('bluebird');
+const google = require('../../api/google');
+const config = require('../../config');
 
 const constructArrayFactory = field => R.map(R.compose(
   R.assoc(field, R.__, {}), // eslint-disable-line no-underscore-dangle
   R.concat('ga:'),
 ));
 
-export const constructMetricsArray = constructArrayFactory('expression');
-export const constructDimensionsArray = constructArrayFactory('name');
+exports.constructMetricsArray = constructArrayFactory('expression');
+exports.constructDimensionsArray = constructArrayFactory('name');
 
-export const constructRequest = (dateRange = 'WEEK', opts) => {
+exports.constructRequest = R.curry((opts, dateRanges) => {
   const base = {
-    viewId: defaultViewId,
-    dateRanges: dateRangesObj[dateRange],
+    viewId: `${config('GA_PROFILE_ID')}`,
+    dateRanges,
   };
 
-  return Object.assign({}, base, opts);
-};
+  const data = { reportRequests: [Object.assign({}, base, opts)] };
+
+  return google.post('/', data);
+});
+
+exports.splitInPairs = R.splitEvery(2);
+exports.mapSeries = R.flip(R.curry(Promise.mapSeries));
+
+exports.getReport = R.compose(R.prop('rows'), R.prop('data'), R.prop(0), R.prop('reports'), R.prop('data'));

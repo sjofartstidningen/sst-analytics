@@ -1,9 +1,9 @@
-import test from 'blue-tape';
-import cheerio from 'cheerio';
-import generateEmail from '../template';
-import transformPug from './transformPug';
-import transformMjml from './transformMjml';
-import report from '../../test/report-example.json';
+const test = require('blue-tape');
+const cheerio = require('cheerio');
+const generateEmail = require('../template');
+const transformPug = require('./transformPug');
+const transformMjml = require('./transformMjml');
+const report = require('../../test/report-example.json');
 
 test.skip('Template: generateEmail()', (t) => {
   generateEmail();
@@ -41,7 +41,7 @@ test('Template: transformPug()', async (t) => {
 
 test('Template: transformMjml()', async (t) => {
   const templateString = await transformPug(report);
-  const result = transformMjml(templateString);
+  const result = await transformMjml(templateString);
 
   {
     const should = 'Should not throw an error';

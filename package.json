@@ -7,7 +7,7 @@
     "build": "babel src --out-dir lib --ignore spec.js,test.js",
     "test": "tape 'src/**/*.spec.js' -r ./test | tap-spec",
     "start": "npm run build && node test/run.js",
-    "invoke": "npm run build && serverless invoke -f send -l -p test/custom-event.json"
+    "invoke": "serverless invoke -f send -l -p test/custom-event.json"
   },
   "repository": "git@github.com:adambrgmn/sst-analytics.git",
   "author": "Adam Bergman <adam@fransvilhelm.com>",

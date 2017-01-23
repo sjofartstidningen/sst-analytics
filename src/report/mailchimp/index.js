@@ -15,7 +15,7 @@ const buildRequestData = R.applySpec({
   },
 });
 
-const isNotAnalyticsMail = R.complement(R.compose(R.test(/statistik/), R.prop('campaign_title')));
+const isNotAnalyticsMail = R.complement(R.compose(R.test(/^Statistik/), R.prop('campaign_title')));
 const filterMails = R.filter(isNotAnalyticsMail);
 
 const extractData = R.compose(

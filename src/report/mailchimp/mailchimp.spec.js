@@ -6,7 +6,7 @@ const clickReport = require('./clickReport');
 const propType = R.compose(R.type, R.prop);
 
 test('REPORT: getMailchimpReport()', (t) => {
-  const date = new Date(2016, 11, 1);
+  const date = new Date(2017, 0, 23);
   return getMailchimpReport(date)
     .then((report) => {
       const singleReport = R.head(report);
